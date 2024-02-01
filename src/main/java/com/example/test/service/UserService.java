@@ -40,7 +40,6 @@ public class UserService {
 		oldUser.setName(request.getName());
 		oldUser.setPassword(request.getPassword());
 		oldUser.setEmail(request.getEmail());
-		oldUser.setPhones(request.getUserPhones());
 		oldUser.setModified(ZonedDateTime.now());
 		return toUserDto(userRepository.save(oldUser));
 	}
