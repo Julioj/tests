@@ -49,6 +49,16 @@ public class UserService {
 		return toUserDto(findUser(email));
 	}
 	
+	public Boolean logInUser(String email, String password) throws Exception {
+		User maybeUser = findUser(email);
+		if(maybeUser != null && maybeUser.getPassword().equals(password)) {
+			maybeUser.setLast_login(ZonedDateTime.now());
+			userRepository.save(maybeUser);
+			return true;
+		}
+		return false;
+	}
+	
 	public void deleteUser(String email) throws Exception {
 		User oldUser = findUser(email);
 		userRepository.delete(oldUser);

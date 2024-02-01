@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.test.models.dtos.MessageDto;
@@ -62,6 +63,22 @@ public class UserController {
 		}catch(Exception e) {
 			MessageDto messageDto = new MessageDto(e.getMessage());
 			return new ResponseEntity<MessageDto>(messageDto, HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping(value = "/login/{email}")
+	private ResponseEntity<?> userLogIn(@PathVariable String email, @RequestParam String password){
+		try {
+			Boolean loggedIn = userService.logInUser(email, password);
+			if(loggedIn) {
+				UserDto newUser = userService.getUser(email);
+				return new ResponseEntity<UserDto>(newUser, HttpStatus.OK);
+			}
+			MessageDto messageDto = new MessageDto("Autorizacion fallida");
+			return new ResponseEntity<MessageDto>(messageDto, HttpStatus.UNAUTHORIZED);
+		}catch(Exception e) {
+			MessageDto messageDto = new MessageDto(e.getMessage());
+			return new ResponseEntity<MessageDto>(messageDto, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
